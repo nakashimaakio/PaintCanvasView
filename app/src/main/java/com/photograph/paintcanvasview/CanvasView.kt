@@ -34,7 +34,6 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         circlePaint.isAntiAlias = true
         circlePaint.style = Paint.Style.FILL
-        circlePaint.pathEffect = CornerPathEffect(10F)
         circlePaint.color = Color.BLACK
     }
 
