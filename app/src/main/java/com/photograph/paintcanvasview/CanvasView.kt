@@ -19,7 +19,6 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var endPoint: PointF? = null
     private var prevBitmap: Bitmap
     private var prevCanvas: Canvas
-    private var action: Int? = null
     private val strokeWidth = 30F
 
     init {
@@ -37,58 +36,43 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         circlePaint.style = Paint.Style.FILL
         circlePaint.pathEffect = CornerPathEffect(10F)
         circlePaint.color = Color.BLACK
-
-        prevCanvas = Canvas(prevBitmap)
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.drawBitmap(prevBitmap, 0F, 0F, null)
-
-        when (action) {
-            ACTION_UP -> {
-                //保存
-                prevCanvas.drawLine()
-            }
-        }
-
         canvas?.drawLine()
     }
 
     private fun Canvas.drawLine() {
         drawPath(path, linePaint)
-
         startPoint?.let {
             drawCircle(it.x, it.y, strokeWidth / 2, circlePaint)
         }
         endPoint?.let {
             drawCircle(it.x, it.y, strokeWidth / 2, circlePaint)
         }
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         when (event?.action) {
             ACTION_DOWN -> {
-                path.rewind()
+                path.reset()
                 path.moveTo(event.x, event.y)
                 startPoint = PointF(event.x, event.y)
-                invalidate()
             }
             ACTION_MOVE -> {
                 path.lineTo(event.x, event.y)
                 endPoint = PointF(event.x, event.y)
-                invalidate()
             }
             ACTION_UP -> {
                 path.lineTo(event.x, event.y)
                 endPoint = PointF(event.x, event.y)
-                invalidate()
+                prevCanvas.drawLine()
             }
         }
-        action = event?.action
-
+        invalidate()
         return true
     }
 
