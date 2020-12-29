@@ -43,14 +43,11 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         canvas?.drawLine()
     }
 
+    /** 最も直近に描かれた線とその両端の点の描画 */
     private fun Canvas.drawLine() {
         drawPath(path, linePaint)
-        startPoint?.let {
-            drawCircle(it.x, it.y, strokeWidth / 2, circlePaint)
-        }
-        endPoint?.let {
-            drawCircle(it.x, it.y, strokeWidth / 2, circlePaint)
-        }
+        startPoint?.let { drawCircle(it.x, it.y, strokeWidth / 2, circlePaint) }
+        endPoint?.let { drawCircle(it.x, it.y, strokeWidth / 2, circlePaint) }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -75,6 +72,7 @@ class CanvasView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         return true
     }
 
+    /** 画面サイズの取得 */
     @Suppress("DEPRECATION")
     private fun getSize(): Point {
         val windowManager = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
